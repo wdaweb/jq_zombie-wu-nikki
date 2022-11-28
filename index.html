@@ -8,14 +8,25 @@
   <title>Document</title>
   <style>
     #game {
-      width: 500px;
-      height: 500px;
-      background: #000;
+      width: 900px;
+      height: 700px;
+
+      background: url(./gif/睡覺.gif)no-repeat center bottom;
+      background-size: 80% auto;
+      border-radius: 50px;
+      border: 2px solid rgb(183, 231, 231);
+      margin: auto;
       overflow: hidden;
       position: relative;
       /* 讓滑鼠變成 url()50 50 中心 */
-      cursor: url(./cursor.png)50 50, auto;
+      cursor: url(./gif/小電蚊拍-01.png) 0 0, auto;
 
+    }
+
+    .score {
+      position: absolute;
+      top: 40%;
+      left: 1%;
     }
 
     img {
@@ -43,14 +54,17 @@
 </head>
 
 <body>
-  <p>分數: <span id="text-score">0</span>分</p>
-  <p>剩餘: <span id="text-time">0</span>秒</p>
-  <p style="font-size: 20px;">最高分玩家: <span id=" text-highscorename">沒有</span></p>
-  <p style="font-size: 20px;">最高分: <span id="text-highscore">0</span>分</p>
-  <hr>
+
+  <div class="score">
+    <p>分數: <span id="text-score">0</span>分</p>
+    <p>剩餘: <span id="text-time">0</span>秒</p>
+    <p style="font-size: 20px;">最高分玩家: <span id=" text-highscorename">沒有</span></p>
+    <p style="font-size: 20px;">最高分: <span id="text-highscore">0</span>分</p>
+    <input type="button" value="開始" id="btn-start">
+  </div>
   <div id="game"></div>
   <br>
-  <input type="button" value="開始" id="btn-start">
+
 
   <script src="./jquery-3.6.1.min.js"></script>
 
@@ -67,19 +81,19 @@
 
     // 最高分
     // const storage=JSON.parse(localStorage.getItem('zombiegame'))
-    const highscore = localStorage.zombiegame ? JSON.parse(localStorage.zombiegame) : { name: '', score: 0 }
+    const highscore = localStorage.msgame ? JSON.parse(localStorage.msgame) : { name: '', score: 0 }
     $('#text-highscorename').text(highscore.name)
     $('#text-highscore').text(highscore.score)
 
 
     // 設定移動
-    function move(zombie) {
+    function move(ms1) {
       const top = Math.round(Math.random() * 100) + '%'
       const left = Math.round(Math.random() * 100) + '%'
-      zombie.stop().animate({ top, left }, 2000, function () {
+      ms1.stop().animate({ top, left }, 1000, function () {
         // 當遊戲結束停止移動
         if ($('#btn-start').attr('disabled') === 'disabled') {
-          move(zombie)
+          move(ms1)
         }
       })
     }
@@ -106,16 +120,16 @@
         $('#text-time').text(countdown)
 
         // 
-        // 殭屍
+
         // 因為隨機+無條件進位 讓random有機率<5 畫面才會有黑幾秒沒殭屍
         const random = Math.ceil(Math.random() * 10)
 
-        if (random > 5 && $('.zombie').length < 7) {
+        if (random > 7 && $('.ms1').length < 7) {
           const top = Math.round(Math.random() * 100) + '%'
           const left = Math.round(Math.random() * 100) + '%'
-          const zombie = $(`<img src="./1.gif" class="zombie" style="top:${top};left:${left}">`)
-          $('#game').append(zombie)
-          move(zombie)
+          const ms1 = $(`<img src="./gif/蚊子1.gif" class="ms1" style="top:${top};left:${left}">`)
+          $('#game').append(ms1)
+          move(ms1)
         }
 
 
@@ -179,9 +193,9 @@
     })
 
     // 設定 當發生 點擊殭屍 後 計分
-    $('#game').on('click', '.zombie', function () {
-      $(this).attr('src', './blood.png')
-      $(this).removeClass('zombie').addClass('blood')
+    $('#game').on('click', '.ms1', function () {
+      $(this).attr('src', './gif/G蚊.gif')
+      $(this).removeClass('ms1').addClass('gMs')
       $(this).stop()
       score++
       $('#text-score').text(score)
