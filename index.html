@@ -7,26 +7,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
+    body {
+      overflow: hidden;
+      background: rgb(183, 231, 231);
+    }
+
     #game {
       width: 900px;
-      height: 700px;
-
+      height: 650px;
       background: url(./gif/睡覺.gif)no-repeat center bottom;
-      background-size: 80% auto;
+      background-size: 100%;
       border-radius: 50px;
-      border: 2px solid rgb(183, 231, 231);
+      border: 6px solid rgb(108, 163, 245);
       margin: auto;
+      margin-top: 2%;
       overflow: hidden;
       position: relative;
       /* 讓滑鼠變成 url()50 50 中心 */
-      cursor: url(./gif/小電蚊拍-01.png) 0 0, auto;
+      /* cursor: url(./01.png)200 200, auto; */
+    }
 
+    .img {
+      width: 900px;
+      height: 650px;
     }
 
     .score {
       position: absolute;
-      top: 40%;
-      left: 1%;
+      top: 20%;
+      left: 3%;
+    }
+
+
+
+    p {
+      border: 5px ridge rgb(6, 76, 181);
+      font-family: '微軟正黑體';
+      font-size: larger;
+      margin-bottom: auto;
+      padding: 15px;
+      background: #fff;
+      border-radius: 30px;
+    }
+
+    .score div {
+      display: inline-block;
+      width: auto;
+      font-size: 18px;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 30px;
+      font-family: '微軟正黑體';
+    }
+
+    button {
+      width: 100px;
+      padding: 10px;
+      border-radius: 20px;
+    }
+
+    #text-highscorename {
+      text-align: center;
     }
 
     img {
@@ -56,13 +98,19 @@
 <body>
 
   <div class="score">
-    <p>分數: <span id="text-score">0</span>分</p>
-    <p>剩餘: <span id="text-time">0</span>秒</p>
-    <p style="font-size: 20px;">最高分玩家: <span id=" text-highscorename">沒有</span></p>
-    <p style="font-size: 20px;">最高分: <span id="text-highscore">0</span>分</p>
-    <input type="button" value="開始" id="btn-start">
+    <p style="font-size: 30px;">最高分玩家:<span id="text-highscorename">沒有</span>
+    </p>
+    <p style="font-size: 30px;">最高分: <span id="text-highscore">0</span>分</p>
+    <br>
+
+    <div>分數: <span id="text-score">0</span>分</div>
+    <div>剩餘: <span id="text-time">0</span>秒</div>
+    <br>
+    <button id="btn-start">開始</button>
   </div>
-  <div id="game"></div>
+  <div id="game">
+
+  </div>
   <br>
 
 
@@ -86,17 +134,6 @@
     $('#text-highscore').text(highscore.score)
 
 
-    // 設定移動
-    function move(ms1) {
-      const top = Math.round(Math.random() * 100) + '%'
-      const left = Math.round(Math.random() * 100) + '%'
-      ms1.stop().animate({ top, left }, 1000, function () {
-        // 當遊戲結束停止移動
-        if ($('#btn-start').attr('disabled') === 'disabled') {
-          move(ms1)
-        }
-      })
-    }
 
 
 
@@ -110,7 +147,7 @@
       $('#text-score').text(score)
 
       //設定剩餘秒數 
-      countdown = 15
+      countdown = 20
       $('#text-time').text(countdown)
 
       // 開始遊戲
@@ -121,15 +158,62 @@
 
         // 
 
-        // 因為隨機+無條件進位 讓random有機率<5 畫面才會有黑幾秒沒殭屍
-        const random = Math.ceil(Math.random() * 10)
+        // 設定移動1
+        function move(ms1) {
+          const top = Math.round(Math.random() * 100) + '%'
+          const left = Math.round(Math.random() * 100) + '%'
+          ms1.stop().animate({ top, left }, 1000, function () {
+            // 當遊戲結束停止移動
+            if ($('#btn-start').attr('disabled') === 'disabled') {
+              move(ms1)
+            }
+          })
+        }
+        // 設定移動3
+        function move(ms3) {
+          const top = Math.round(Math.random() * 120) + '%'
+          const right = Math.round(Math.random() * 80) + '%'
+          ms3.stop().animate({ top, right }, 500, function () {
+            if ($('#btn-start').attr('disabled') === 'disabled') { move(ms3) }
+          })
+        }
+        // 設定移動4
+        function move(ms4) {
+          const top = Math.round(Math.random() * 200) + '%'
+          const left = Math.round(Math.random() * 100) + '%'
+          ms4.stop().animate({ top, left }, 2000, function () {
+            if ($('#btn-start').attr('disabled') === 'disabled') { move(ms4) }
+          })
+        }
 
-        if (random > 7 && $('.ms1').length < 7) {
+
+
+        // 因為隨機+無條件進位 讓random有機率<5 畫面才會有黑幾秒
+        const rms1 = Math.ceil(Math.random() * 10)
+        const rms3 = Math.ceil(Math.random() * 10)
+        const rms4 = Math.ceil(Math.random() * 10)
+        if (rms1 > 7 && $('.ms1').length < 3) {
           const top = Math.round(Math.random() * 100) + '%'
           const left = Math.round(Math.random() * 100) + '%'
           const ms1 = $(`<img src="./gif/蚊子1.gif" class="ms1" style="top:${top};left:${left}">`)
           $('#game').append(ms1)
           move(ms1)
+        }
+
+        if (rms3 > 8 && $('.ms3').length < 3) {
+          const top = Math.round(Math.random() * 100) + '%'
+          const right = Math.round(Math.random() * 100) + '%'
+          const ms3 = $(`<img src="./gif/蚊子3.gif" class="ms3" style="top:${top};right:${right}">`)
+          $('#game').prepend(ms3)
+          move(ms3)
+        }
+
+        if (rms4 > 9 && $('.ms4').length < 3) {
+          const top = Math.round(Math.random() * 100) + '%'
+          const left = Math.round(Math.random() * 100) + '%'
+          const ms4 = $(`<img src="./gif/蚊子4.gif" class="ms4" style="top:${top};left:${left}">`)
+          $('#game').append(ms4)
+          move(ms4)
         }
 
 
@@ -192,7 +276,7 @@
 
     })
 
-    // 設定 當發生 點擊殭屍 後 計分
+    // 設定計分
     $('#game').on('click', '.ms1', function () {
       $(this).attr('src', './gif/G蚊.gif')
       $(this).removeClass('ms1').addClass('gMs')
@@ -202,6 +286,13 @@
     })
 
 
+    $('#game').on('click', '.ms3', function () {
+      $(this).attr('src', './gif/G蚊.gif')
+      $(this).removeClass('ms1').addClass('gMs')
+      $(this).stop()
+      score++
+      $('#text-score').text(score)
+    })
 
   </script>
 
